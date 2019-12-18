@@ -1,6 +1,6 @@
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers
-from .models import User, Tweet
+from .models import User, Tweet, Follower
 
 
 class UserCreateSerializer(UserCreateSerializer):
@@ -19,4 +19,14 @@ class TweetSerializer(serializers.ModelSerializer):
             'author',
             'tweet_text',
             'created_on'
+        ]
+
+
+class FollowerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Follower
+        fields = [
+            'id',
+            'follower_id',
+            'followed_id'
         ]

@@ -10,6 +10,7 @@
 import LoginSignUpVue from "../layouts/LoginSignUp.vue";
 import Login from "@/components/Login.vue";
 import SignUp from "@/components/SignUp.vue";
+import router from "../router/index.js";
 
 export default {
   name: "home",
@@ -24,6 +25,11 @@ export default {
   components: {
     Login,
     SignUp
+  },
+  mounted() {
+    if (this.$store.state.authToken) {
+      router.push({ path: "/myprofile" });
+    }
   }
 };
 </script>

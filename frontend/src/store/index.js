@@ -2,7 +2,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
-import router from "../router/index.js";
 
 Vue.use(Vuex);
 
@@ -66,7 +65,6 @@ export default new Vuex.Store({
             "auth_token",
             JSON.stringify(data["auth_token"])
           );
-          router.push({ path: "/home" });
         })
         .catch(error => {
           console.log(error);

@@ -11,7 +11,7 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
 
     def get_username(self):
-        return self.email
+        return self.username
 
 
 class Tweet(models.Model):
@@ -22,3 +22,8 @@ class Tweet(models.Model):
 
     def __str__(self):
         return self.tweet_text
+
+
+class Follower(models.Model):
+    follower_id = models.IntegerField()
+    followed_id = models.IntegerField()

@@ -4,16 +4,13 @@
       <article class="media">
         <div class="media-left">
           <figure class="image is-64x64">
-            <img
-              src="https://bulma.io/images/placeholders/128x128.png"
-              alt="Image"
-            />
+            <img src="https://bulma.io/images/placeholders/128x128.png" alt="Image" />
           </figure>
         </div>
         <div class="media-content">
           <div class="content">
             <p>
-              <strong>John Smith</strong>
+              <strong>{{tweet["first_name"]}}</strong>
               <br />
               {{ tweet["tweet_text"] }}
             </p>
@@ -27,10 +24,7 @@
               </a>
               <a class="level-item" aria-label="retweet">
                 <span class="icon is-small">
-                  <i
-                    class="fas fa-retweet has-text-info"
-                    aria-hidden="true"
-                  ></i>
+                  <i class="fas fa-retweet has-text-info" aria-hidden="true"></i>
                 </span>
               </a>
               <a class="level-item" aria-label="like">
@@ -38,9 +32,11 @@
                   <i class="fas fa-heart has-text-info" aria-hidden="true"></i>
                 </span>
               </a>
-              <span class="is-size-7 has-text-weight-semibold">{{
+              <span class="is-size-7 has-text-weight-semibold">
+                {{
                 tweet["created_on"]
-              }}</span>
+                }}
+              </span>
             </div>
           </nav>
         </div>
