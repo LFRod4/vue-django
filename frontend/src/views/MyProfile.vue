@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="hero-body">
     <div class="columns">
       <div class="column is-one-third">
         <HomeSideNav></HomeSideNav>
@@ -40,8 +40,4 @@ export default {
 </script>
 
 <style scoped>
-.tweet-box {
-  height: 50vh;
-  overflow: scroll;
-}
 </style>

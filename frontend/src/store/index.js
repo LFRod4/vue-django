@@ -2,6 +2,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+import router from "../router/index.js";
 
 Vue.use(Vuex);
 
@@ -46,6 +47,7 @@ export default new Vuex.Store({
         })
         .then(response => {
           dispatch("getUserInfo", response.data);
+          router.push({ path: "/myprofile" });
         })
         .catch(error => {
           console.log(error);

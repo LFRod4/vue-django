@@ -1,9 +1,9 @@
 <template>
-  <section class="hero is-info is-full-height">
+  <section class="hero is-dark is-full-height">
     <!-- Hero head: will stick at the top -->
     <TheHeader></TheHeader>
     <!-- Hero content: will be in the middle -->
-    <div class="hero-body">
+    <div class>
       <slot />
     </div>
 

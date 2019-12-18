@@ -12,6 +12,7 @@ new Vue({
   store,
   beforeCreate() {
     this.$store.dispatch("initializeToken");
+    return;
   },
   render: h => h(App)
 }).$mount("#app");
