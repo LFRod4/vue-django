@@ -25,6 +25,7 @@ export default {
   name: "home",
   created() {
     this.$emit("update:layout", LayoutDefault);
+    this.$store.dispatch("getTweets");
   },
   components: {
     HomeSideNav,
@@ -38,6 +39,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-</style>

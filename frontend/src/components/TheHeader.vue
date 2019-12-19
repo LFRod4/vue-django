@@ -12,10 +12,18 @@
         </div>
         <div id="navbarMenuHeroA" class="navbar-menu">
           <div class="navbar-end">
-            <router-link to="/" class="navbar-item is-active">Home</router-link>
-            <router-link to="/myprofile" class="navbar-item"
-              >My Profile</router-link
-            >
+            <router-link
+              @click.native="activeTab = 'home'"
+              to="/"
+              class="navbar-item"
+              :class="{ 'is-active' : activeTab === 'home'}"
+            >Home</router-link>
+            <router-link
+              @click.native="activeTab = 'profile'"
+              to="/myprofile"
+              class="navbar-item"
+              :class=" { 'is-active' : activeTab === 'profile'}"
+            >My Profile</router-link>
           </div>
         </div>
       </div>
@@ -28,6 +36,11 @@ export default {
   name: "TheHeader",
   props: {
     msg: String
+  },
+  data() {
+    return {
+      activeTab: "profile"
+    };
   }
 };
 </script>

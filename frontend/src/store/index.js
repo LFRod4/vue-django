@@ -12,7 +12,8 @@ export default new Vuex.Store({
     authToken: "",
     info: "",
     error: {},
-    tweetList: []
+    tweetList: [],
+    activeTab: ""
   },
   getters: {
     user: state => {
@@ -28,6 +29,9 @@ export default new Vuex.Store({
     },
     SETTWEETS: (state, tweetList) => {
       state.tweetList = tweetList;
+    },
+    CHANGEACTIVETAB: (state, newActiveTab) => {
+      state.activeTab = newActiveTab;
     }
   },
   actions: {
@@ -47,13 +51,14 @@ export default new Vuex.Store({
         })
         .then(response => {
           dispatch("getUserInfo", response.data);
+          dispatch("changeActiveTab", "profile");
           router.push({ path: "/myprofile" });
         })
         .catch(error => {
           console.log(error);
         });
     },
-    getUserInfo: ({ commit, dispatch }, data) => {
+    getUserInfo: ({ commit }, data) => {
       axios.defaults.headers = {
         Authorization: "Token " + data["auth_token"]
       };
@@ -62,7 +67,7 @@ export default new Vuex.Store({
         .then(response => {
           commit("SETUSERINFO", response.data);
           commit("SETAUTHTOKEN", data["auth_token"]);
-          dispatch("getTweets");
+          // dispatch("getTweets");
           localStorage.setItem(
             "auth_token",
             JSON.stringify(data["auth_token"])
@@ -83,6 +88,9 @@ export default new Vuex.Store({
           return error;
         });
       return true;
+    },
+    changeActiveTab: ({ commit }, newActiveTab) => {
+      commit("CHANGEACTIVETAB", newActiveTab);
     }
   },
   modules: {}

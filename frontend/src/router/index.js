@@ -11,7 +11,7 @@ const routes = [
     name: "login",
     component: Login,
     beforeEnter: (to, from, next) => {
-      if (!store.state.authToken) next("/home");
+      if (store.state.authToken) next("/home");
       else next();
     }
   },

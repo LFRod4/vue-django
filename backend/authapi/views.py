@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.db import connection
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
@@ -10,7 +11,7 @@ from rest_framework.views import APIView
 
 
 from .models import Tweet, User, Follower
-from .serializers import TweetSerializer, FollowerSerializer
+from .serializers import TweetSerializer, FollowerSerializer, AllDataSerializer
 from .permissions import IsOwnerOrReadOnly
 
 # Create your views here.
@@ -52,9 +53,17 @@ class Followers(APIView):
         data = FollowerSerializer(followers, many=True).data
         return Response(data)
 
-    def post(self, request):
-        serializer = FollowerSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AllData(APIView):
+    permission_classes = [IsOwnerOrReadOnly]
+
+    def get(self, request, profile_id=None):
+
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT authapi_user.id AS profile_id, authapi_user.first_name, authapi_user.last_name, authapi_tweet.tweet_text")
+            cursor.execute(
+                "FROM authapi_tweet INNER JOIN authapi_user ON authapi_user.id=authapi_tweet.author_id")
+            table = cursor.fetchone()
+            table = AllDataSerializer(table, many=True).table
+            return Response(table)
