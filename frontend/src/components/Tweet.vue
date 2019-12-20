@@ -1,7 +1,7 @@
 <template>
   <div>
-    <transition-group name="tweet" tag="div">
-      <div class="box" v-for="tweet in tweetList" :key="tweet.id">
+    <transition-group name="tweets" tag="div">
+      <div class="box" v-for="tweets in tweetList" :key="tweets.id">
         <article class="media">
           <div class="media-left">
             <figure class="image is-64x64">
@@ -11,9 +11,9 @@
           <div class="media-content">
             <div class="content">
               <p>
-                <strong>{{tweet["first_name"]}}</strong>
+                <strong>{{ tweets[1] }}</strong>
                 <br />
-                {{ tweet["tweet_text"] }}
+                {{ tweets[3] }}
               </p>
             </div>
             <nav class="level is-mobile">
@@ -33,11 +33,7 @@
                     <i class="fas fa-heart has-text-info" aria-hidden="true"></i>
                   </span>
                 </a>
-                <span class="is-size-7 has-text-weight-semibold">
-                  {{
-                  tweet["created_on"]
-                  }}
-                </span>
+                <span class="is-size-7 has-text-weight-semibold"></span>
               </div>
             </nav>
           </div>
@@ -52,8 +48,7 @@ export default {
   name: "Tweet",
   data() {
     return {
-      tweet: "",
-      allTweets: {}
+      tweet: ""
     };
   },
   computed: {
@@ -68,16 +63,16 @@ export default {
 </script>
 
 <style scoped>
-.tweet-enter-active {
+.tweets-enter-active {
   animation: add-tweet 1s;
 }
 
-.tweet-leave-active {
+.tweets-leave-active {
   position: absolute;
   animation: add-tweet 1s reverse;
 }
 
-.tweet-move {
+.tweets-move {
   transition: transform 1s;
 }
 @keyframes add-tweet {

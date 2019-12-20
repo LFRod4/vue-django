@@ -55,15 +55,11 @@ class Followers(APIView):
 
 
 class AllData(APIView):
-    permission_classes = [IsOwnerOrReadOnly]
 
-    def get(self, request, profile_id=None):
+    def get(self, profile_id=None):
 
         with connection.cursor() as cursor:
             cursor.execute(
-                "SELECT authapi_user.id AS profile_id, authapi_user.first_name, authapi_user.last_name, authapi_tweet.tweet_text")
-            cursor.execute(
-                "FROM authapi_tweet INNER JOIN authapi_user ON authapi_user.id=authapi_tweet.author_id")
-            table = cursor.fetchone()
-            table = AllDataSerializer(table, many=True).table
+                "SELECT authapi_user.id AS profile_id, authapi_user.first_name, authapi_user.last_name, authapi_tweet.tweet_text FROM authapi_tweet INNER JOIN authapi_user ON authapi_user.id = authapi_tweet.author_id;")
+            table = cursor.fetchall()
             return Response(table)

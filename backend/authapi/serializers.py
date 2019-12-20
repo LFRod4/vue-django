@@ -35,13 +35,10 @@ class FollowerSerializer(serializers.ModelSerializer):
 class AllDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = AllData
-        field = [
+        fields = [
             'id',
             'profile_id',
             'first_name',
             'last_name',
-            'username',
-            'tweet_text',
-            'created_on',
-            'followed_id'
+            'tweet_text'
         ]

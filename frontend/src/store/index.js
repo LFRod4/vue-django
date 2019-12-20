@@ -12,7 +12,7 @@ export default new Vuex.Store({
     authToken: "",
     info: "",
     error: {},
-    tweetList: [],
+    tweetList: {},
     activeTab: ""
   },
   getters: {
@@ -58,7 +58,7 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
-    getUserInfo: ({ commit }, data) => {
+    getUserInfo: ({ commit, dispatch }, data) => {
       axios.defaults.headers = {
         Authorization: "Token " + data["auth_token"]
       };
@@ -67,7 +67,7 @@ export default new Vuex.Store({
         .then(response => {
           commit("SETUSERINFO", response.data);
           commit("SETAUTHTOKEN", data["auth_token"]);
-          // dispatch("getTweets");
+          dispatch("getTweets");
           localStorage.setItem(
             "auth_token",
             JSON.stringify(data["auth_token"])
@@ -77,17 +77,15 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
-    getTweets: ({ state, commit }) => {
+    getTweets: ({ commit }) => {
       axios
-        .get(`http://127.0.0.1:8000/api/tweets/list/${state.user.id}`)
+        .get("http://127.0.0.1:8000/api/tweets/alldata/")
         .then(response => {
           commit("SETTWEETS", response.data);
-          return response.data;
         })
         .catch(error => {
           return error;
         });
-      return true;
     },
     changeActiveTab: ({ commit }, newActiveTab) => {
       commit("CHANGEACTIVETAB", newActiveTab);
