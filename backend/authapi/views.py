@@ -53,13 +53,19 @@ class Followers(APIView):
         data = FollowerSerializer(followers, many=True).data
         return Response(data)
 
+    def delete(self, request, follower_id=None):
+
+        unfollow = Follower.objects.filter(followed_id=follower_id)
+        unfollow.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class AllData(APIView):
 
-    def get(self, profile_id=None):
+    def get(self, *args):
 
         with connection.cursor() as cursor:
             cursor.execute(
-                "SELECT authapi_user.id AS profile_id, authapi_user.first_name, authapi_user.last_name, authapi_tweet.tweet_text FROM authapi_tweet INNER JOIN authapi_user ON authapi_user.id = authapi_tweet.author_id;")
+                "SELECT authapi_user.id AS profile_id, authapi_user.first_name, authapi_user.last_name, authapi_tweet.tweet_text, authapi_tweet.created_on FROM authapi_tweet INNER JOIN authapi_user ON authapi_user.id = authapi_tweet.author_id ORDER BY created_on DESC;")
             table = cursor.fetchall()
             return Response(table)

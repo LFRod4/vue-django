@@ -28,6 +28,9 @@ class Follower(models.Model):
     follower_id = models.IntegerField()
     followed_id = models.IntegerField()
 
+    def __str__(self):
+        return self.followed_id
+
 
 class AllData(models.Model):
     profile_id = models.IntegerField()

@@ -12,8 +12,10 @@ export default new Vuex.Store({
     authToken: "",
     info: "",
     error: {},
-    tweetList: {},
-    activeTab: ""
+    userTweetList: [],
+    followersTweetList: [],
+    activeTab: "",
+    test: []
   },
   getters: {
     user: state => {
@@ -27,11 +29,17 @@ export default new Vuex.Store({
     SETAUTHTOKEN: (state, token) => {
       state.authToken = token;
     },
-    SETTWEETS: (state, tweetList) => {
-      state.tweetList = tweetList;
+    SETUSERTWEETS: (state, userTweetList) => {
+      state.userTweetList = userTweetList;
+    },
+    SETFOLLOWERTWEETS: (state, followerTweets) => {
+      state.followersTweetList = followerTweets;
     },
     CHANGEACTIVETAB: (state, newActiveTab) => {
       state.activeTab = newActiveTab;
+    },
+    test: (state, data) => {
+      state.tests = data;
     }
   },
   actions: {
@@ -67,7 +75,7 @@ export default new Vuex.Store({
         .then(response => {
           commit("SETUSERINFO", response.data);
           commit("SETAUTHTOKEN", data["auth_token"]);
-          dispatch("getTweets");
+          dispatch("getFollowers");
           localStorage.setItem(
             "auth_token",
             JSON.stringify(data["auth_token"])
@@ -77,11 +85,38 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
-    getTweets: ({ commit }) => {
+    getUserTweets: ({ state, commit }) => {
       axios
-        .get("http://127.0.0.1:8000/api/tweets/alldata/")
+        .get(`http://127.0.0.1:8000/api/tweets/list/${state.user.id}`)
         .then(response => {
-          commit("SETTWEETS", response.data);
+          commit("SETUSERTWEETS", response.data);
+        })
+        .catch(error => {
+          return error;
+        });
+    },
+    getFollowers: ({ commit, dispatch }) => {
+      var follower_ids = [];
+      axios
+        .get(`http://127.0.0.1:8000/api/tweets/followers/1`)
+        .then(response => {
+          follower_ids = response.data.map(obj => {
+            return obj.followed_id;
+          });
+          commit("test", follower_ids);
+          dispatch("getFollowerTweets", follower_ids);
+        })
+        .catch(error => {
+          return error;
+        });
+    },
+    getFollowerTweets: ({ commit }, follower_ids) => {
+      axios
+        .get("http://127.0.0.1:8000/api/tweets/alldata/", {
+          params: follower_ids
+        })
+        .then(response => {
+          commit("SETFOLLOWERTWEETS", response.data);
         })
         .catch(error => {
           return error;

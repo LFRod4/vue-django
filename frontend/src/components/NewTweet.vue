@@ -2,9 +2,7 @@
   <div class="box">
     <label class="label">New Tweet</label>
     <textarea class="textarea" v-model="newTweet"></textarea>
-    <button class="button is-info submit-tweet" @click="submitTweet()">
-      Tweet
-    </button>
+    <button class="button is-info submit-tweet" @click="submitTweet()">Tweet</button>
   </div>
 </template>
 
@@ -26,11 +24,11 @@ export default {
       axios
         .post("http://127.0.0.1:8000/api/tweets/create/", {
           tweet_text: this.newTweet,
-          author: 1
+          author: this.$store.state.user["id"]
         })
         .then(res => {
           this.newTweet = "";
-          this.$store.dispatch("getTweets");
+          this.$store.dispatch("getUserTweets");
           return res;
         })
         .catch(error => {

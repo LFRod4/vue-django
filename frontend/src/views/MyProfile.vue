@@ -25,7 +25,6 @@ export default {
   name: "home",
   created() {
     this.$emit("update:layout", LayoutDefault);
-    this.$store.dispatch("getTweets");
   },
   components: {
     HomeSideNav,
@@ -39,3 +38,29 @@ export default {
   }
 };
 </script>
+
+<style>
+.tweets-enter-active {
+  animation: add-tweet 1s;
+}
+
+.tweets-leave-active {
+  position: absolute;
+  animation: add-tweet 1s reverse;
+}
+
+.tweets-move {
+  transition: transform 1s;
+}
+@keyframes add-tweet {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+</style>

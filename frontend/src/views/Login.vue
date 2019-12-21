@@ -28,7 +28,6 @@ export default {
   },
   mounted() {
     if (this.$store.state.authToken) {
-      window.alert("test");
       router.push({ path: "/myprofile" });
     }
   }

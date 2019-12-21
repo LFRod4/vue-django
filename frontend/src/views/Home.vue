@@ -8,7 +8,6 @@
         <HomeSideNav></HomeSideNav>
       </div>
       <div class="column right-column">
-        <NewTweet></NewTweet>
         <Tweet></Tweet>
       </div>
     </div>
@@ -18,14 +17,12 @@
 <script>
 // @ is an alias to /src
 import LayoutDefault from "@/layouts/LayoutDefault.vue";
-import NewTweet from "@/components/NewTweet.vue";
 import HomeSideNav from "@/components/HomeSideNav.vue";
 import Tweet from "@/components/Tweet.vue";
 
 export default {
   name: "home",
   components: {
-    NewTweet,
     HomeSideNav,
     Tweet
   },
@@ -51,7 +48,7 @@ export default {
 }
 
 .right-column {
-  height: 100vh;
+  height: 70vh;
   overflow: scroll;
 }
 </style>
