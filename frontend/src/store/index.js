@@ -39,7 +39,7 @@ export default new Vuex.Store({
       state.activeTab = newActiveTab;
     },
     test: (state, data) => {
-      state.tests = data;
+      state.test = data;
     }
   },
   actions: {
@@ -75,11 +75,12 @@ export default new Vuex.Store({
         .then(response => {
           commit("SETUSERINFO", response.data);
           commit("SETAUTHTOKEN", data["auth_token"]);
-          dispatch("getFollowers");
+          // dispatch("getFollowers");
           localStorage.setItem(
             "auth_token",
             JSON.stringify(data["auth_token"])
           );
+          dispatch("getUserTweets");
         })
         .catch(error => {
           console.log(error);
@@ -95,10 +96,10 @@ export default new Vuex.Store({
           return error;
         });
     },
-    getFollowers: ({ commit, dispatch }) => {
+    getFollowers: ({ state, commit, dispatch }) => {
       var follower_ids = [];
       axios
-        .get(`http://127.0.0.1:8000/api/tweets/followers/1`)
+        .get(`http://127.0.0.1:8000/api/tweets/followers/${state.user.id}`)
         .then(response => {
           follower_ids = response.data.map(obj => {
             return obj.followed_id;
@@ -116,6 +117,14 @@ export default new Vuex.Store({
           params: follower_ids
         })
         .then(response => {
+          var followerTweets = [];
+          followerTweets = response.data.map(obj => {
+            return obj.followed_id;
+          });
+          for (var x = 0; x < response.data.length; x++) {
+            var obj = {};
+            obj[""];
+          }
           commit("SETFOLLOWERTWEETS", response.data);
         })
         .catch(error => {

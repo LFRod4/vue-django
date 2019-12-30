@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <transition-group name="tweets"> -->
+    <!-- <transition-group name="tweets" v-if="currentRouteName === 'myprofile'"> -->
     <div class="box" v-for="tweets in tweetList" :key="tweets.id">
       <article class="media">
         <div class="media-left">
@@ -14,6 +14,7 @@
               <strong>{{ user.first_name + user.last_name }}</strong>
               <br />
               {{ tweets.tweet_text }}
+              <br />
             </p>
           </div>
           <nav class="level is-mobile">

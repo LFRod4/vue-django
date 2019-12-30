@@ -28,6 +28,7 @@ export default {
   },
   created() {
     this.$emit("update:layout", LayoutDefault);
+    this.$store.dispatch("getFollowers");
   }
 };
 </script>
