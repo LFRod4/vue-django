@@ -8,7 +8,7 @@
         <HomeSideNav></HomeSideNav>
       </div>
       <div class="column right-column">
-        <Tweet></Tweet>
+        <Tweet class="tweet" v-for="tweets in tweetList" :key="tweets.id" :tweets="tweets"></Tweet>
       </div>
     </div>
   </div>
@@ -29,6 +29,11 @@ export default {
   created() {
     this.$emit("update:layout", LayoutDefault);
     this.$store.dispatch("getFollowers");
+  },
+  computed: {
+    tweetList() {
+      return this.$store.state.followersTweetList;
+    }
   }
 };
 </script>
@@ -51,5 +56,9 @@ export default {
 .right-column {
   height: 70vh;
   overflow: scroll;
+}
+
+.tweet {
+  padding-bottom: 10px;
 }
 </style>

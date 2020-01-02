@@ -20,4 +20,8 @@ export default {
   height: 50vh;
   overflow: scroll;
 }
+
+Tweet {
+  padding-bottom: 10px;
+}
 </style>

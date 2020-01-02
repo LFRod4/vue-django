@@ -7,7 +7,9 @@
       <div class="column">
         <NewTweet></NewTweet>
         <div class="tweet-box">
-          <Tweet></Tweet>
+          <transition-group name="tweets">
+            <Tweet class="tweet" v-for="tweets in tweetList" :key="tweets.id" :tweets="tweets"></Tweet>
+          </transition-group>
         </div>
       </div>
     </div>
@@ -34,12 +36,19 @@ export default {
   computed: {
     getToken() {
       return this.$store.state.auth_token;
+    },
+    tweetList() {
+      return this.$store.state.userTweetList;
     }
   }
 };
 </script>
 
 <style>
+.tweet {
+  padding-bottom: 15px;
+}
+
 .tweets-enter-active {
   animation: add-tweet 1s;
 }

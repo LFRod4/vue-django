@@ -1,6 +1,6 @@
 <template>
   <div class="login box">
-    <Login></Login>
+    <LoginForm></LoginForm>
     <SignUp v-if="loggedIn"></SignUp>
   </div>
 </template>
@@ -8,9 +8,9 @@
 <script>
 // @ is an alias to /src
 import LoginSignUpVue from "../layouts/LoginSignUp.vue";
-import Login from "@/components/Login.vue";
+import LoginForm from "@/components/LoginForm.vue";
 import SignUp from "@/components/SignUp.vue";
-import router from "../router/index.js";
+// import router from "../router/index.js";
 
 export default {
   name: "home",
@@ -23,14 +23,14 @@ export default {
     };
   },
   components: {
-    Login,
+    LoginForm,
     SignUp
-  },
-  mounted() {
-    if (this.$store.state.authToken) {
-      router.push({ path: "/myprofile" });
-    }
   }
+  // mounted() {
+  //   if (this.$store.state.authToken) {
+  //     router.push({ path: "/myprofile" });
+  //   }
+  // }
 };
 </script>
 

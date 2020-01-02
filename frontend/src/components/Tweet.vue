@@ -1,7 +1,6 @@
 <template>
   <div>
-    <!-- <transition-group name="tweets" v-if="currentRouteName === 'myprofile'"> -->
-    <div class="box" v-for="tweets in tweetList" :key="tweets.id">
+    <div class="box">
       <article class="media">
         <div class="media-left">
           <figure class="image is-64x64">
@@ -10,12 +9,22 @@
         </div>
         <div class="media-content">
           <div class="content">
-            <p>
-              <strong>{{ user.first_name + user.last_name }}</strong>
+            <div>
+              <div v-if="tweets.first_name">
+                <strong>
+                  {{
+                  tweets.first_name + " " + tweets.last_name
+                  }}
+                </strong>
+              </div>
+              <div v-else>
+                <strong>{{ user.first_name + " " + user.last_name }}</strong>
+              </div>
               <br />
               {{ tweets.tweet_text }}
               <br />
-            </p>
+              <strong>{{ tweets.created_on }}</strong>
+            </div>
           </div>
           <nav class="level is-mobile">
             <div class="level-left">
@@ -40,29 +49,22 @@
         </div>
       </article>
     </div>
-    <!-- </transition-group> -->
   </div>
 </template>
 
 <script>
 export default {
   name: "Tweet",
+  props: ["tweets"],
   data() {
     return {
-      tweet: ""
+      tweet: "",
+      withTransition: true
     };
   },
   computed: {
     user() {
       return this.$store.state.user;
-    },
-    tweetList() {
-      if (this.currentRouteName === "myprofile") {
-        return this.$store.state.userTweetList;
-      }
-      if (this.currentRouteName === "home") {
-        return this.$store.state.followersTweetList;
-      } else return false;
     },
     currentRouteName() {
       return this.$route.name;

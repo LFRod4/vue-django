@@ -39,26 +39,6 @@ class TweetAPIView(generics.CreateAPIView, mixins.CreateModelMixin, generics.Gen
         return self.create(request, *args, **kwargs)
 
 
-# class AllTweets(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
-#     permission_classes = [IsOwnerOrReadOnly]
-#     serializer_class = TweetSerializer
-
-#     def get(self, request, author=None):
-#         if author != None:
-#             tweets = Tweet.objects.filter(
-#                 author=author).order_by('-created_on')
-#         else:
-#             tweets = Tweet.objects.all()
-#         data = TweetSerializer(tweets, many=True).data
-#         return Response(data)
-
-#     def perform_create(self, serializer):
-#         serializer.save(author=self.request.user)
-
-#     def post(self, request, *args, **kwargs):
-#         return self.create(request, *args, **kwargs)
-
-
 class Followers(APIView):
     permission_classes = [IsOwnerOrReadOnly]
 

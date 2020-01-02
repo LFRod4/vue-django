@@ -16,14 +16,15 @@
               @click.native="activeTab = 'home'"
               to="/"
               class="navbar-item"
-              :class="{ 'is-active' : activeTab === 'home'}"
+              :class="{ 'is-active': activeTab === 'home' }"
             >Home</router-link>
             <router-link
               @click.native="activeTab = 'profile'"
               to="/myprofile"
               class="navbar-item"
-              :class=" { 'is-active' : activeTab === 'profile'}"
+              :class="{ 'is-active': activeTab === 'profile' }"
             >My Profile</router-link>
+            <div class="navbar-item" @click="logout()">Logout</div>
           </div>
         </div>
       </div>
@@ -41,6 +42,11 @@ export default {
     return {
       activeTab: "profile"
     };
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch("logout");
+    }
   }
 };
 </script>

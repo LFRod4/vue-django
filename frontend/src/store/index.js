@@ -14,8 +14,7 @@ export default new Vuex.Store({
     error: {},
     userTweetList: [],
     followersTweetList: [],
-    activeTab: "",
-    test: []
+    activeTab: ""
   },
   getters: {
     user: state => {
@@ -38,8 +37,8 @@ export default new Vuex.Store({
     CHANGEACTIVETAB: (state, newActiveTab) => {
       state.activeTab = newActiveTab;
     },
-    test: (state, data) => {
-      state.test = data;
+    LOGOUT: state => {
+      state.authToken = "";
     }
   },
   actions: {
@@ -52,6 +51,9 @@ export default new Vuex.Store({
       }
     },
     logIn: ({ dispatch }, data) => {
+      axios.defaults.headers = {
+        "Content-Type": "application/json"
+      };
       axios
         .post("http://127.0.0.1:8000/auth/token/login/", {
           email: data.email,
@@ -61,6 +63,24 @@ export default new Vuex.Store({
           dispatch("getUserInfo", response.data);
           dispatch("changeActiveTab", "profile");
           router.push({ path: "/myprofile" });
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    createNewUser: ({ dispatch }, payload) => {
+      axios
+        .post("http://127.0.0.1:8000/auth/users/", {
+          first_name: payload.firstName,
+          last_name: payload.lastName,
+          username: payload.username,
+          password: payload.password,
+          re_password: payload.password,
+          email: payload.email
+        })
+        .then(response => {
+          dispatch("logIn", payload);
+          return response.data;
         })
         .catch(error => {
           console.log(error);
@@ -96,7 +116,7 @@ export default new Vuex.Store({
           return error;
         });
     },
-    getFollowers: ({ state, commit, dispatch }) => {
+    getFollowers: ({ state, dispatch }) => {
       var follower_ids = [];
       axios
         .get(`http://127.0.0.1:8000/api/tweets/followers/${state.user.id}`)
@@ -104,7 +124,6 @@ export default new Vuex.Store({
           follower_ids = response.data.map(obj => {
             return obj.followed_id;
           });
-          commit("test", follower_ids);
           dispatch("getFollowerTweets", follower_ids);
         })
         .catch(error => {
@@ -118,14 +137,30 @@ export default new Vuex.Store({
         })
         .then(response => {
           var followerTweets = [];
-          followerTweets = response.data.map(obj => {
-            return obj.followed_id;
-          });
           for (var x = 0; x < response.data.length; x++) {
             var obj = {};
-            obj[""];
+            obj["author"] = response.data[x][0];
+            obj["first_name"] = response.data[x][1];
+            obj["last_name"] = response.data[x][2];
+            obj["tweet_text"] = response.data[x][3];
+            obj["created_on"] = response.data[x][4];
+            followerTweets.push(obj);
           }
-          commit("SETFOLLOWERTWEETS", response.data);
+          commit("SETFOLLOWERTWEETS", followerTweets);
+        })
+        .catch(error => {
+          return error;
+        });
+    },
+    logout: context => {
+      axios
+        .post("http://127.0.0.1:8000/auth/token/logout/", {
+          Authorization: "Token " + context.authToken
+        })
+        .then(response => {
+          context.commit("LOGOUT");
+          router.push({ path: "/" });
+          return response;
         })
         .catch(error => {
           return error;

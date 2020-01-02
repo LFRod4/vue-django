@@ -4,7 +4,7 @@
       <nav class="navbar">
         <div class="container">
           <div class="navbar-brand">
-            <a class="navbar-item is-size-1 has-text-white">Twitter</a>
+            <a class="navbar-item is-size-1 has-text-white">TW</a>
             <span class="navbar-burger burger" data-target="navbarMenuHeroA">
               <span></span>
               <span></span>
