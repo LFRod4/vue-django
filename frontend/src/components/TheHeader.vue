@@ -12,18 +12,9 @@
         </div>
         <div id="navbarMenuHeroA" class="navbar-menu">
           <div class="navbar-end">
-            <router-link
-              @click.native="activeTab = 'home'"
-              to="/"
-              class="navbar-item"
-              :class="{ 'is-active': activeTab === 'home' }"
-            >Home</router-link>
-            <router-link
-              @click.native="activeTab = 'profile'"
-              to="/myprofile"
-              class="navbar-item"
-              :class="{ 'is-active': activeTab === 'profile' }"
-            >My Profile</router-link>
+            <router-link to="/" class="navbar-item">Home</router-link>
+            <router-link to="/myprofile" class="navbar-item">My Profile</router-link>
+            <router-link to="/discover" class="navbar-item">Discover</router-link>
             <div class="navbar-item" @click="logout()">Logout</div>
           </div>
         </div>
@@ -40,12 +31,22 @@ export default {
   },
   data() {
     return {
-      activeTab: "profile"
+      routeName: "myprofile"
     };
   },
   methods: {
     logout() {
       this.$store.dispatch("logout");
+    }
+  },
+  computed: {
+    getRouteName() {
+      return this.$route.name;
+    }
+  },
+  watch: {
+    getRouteName: function(route) {
+      this.routeName = route;
     }
   }
 };

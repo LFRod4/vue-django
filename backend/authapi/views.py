@@ -21,7 +21,6 @@ from .permissions import IsOwnerOrReadOnly
 class TweetAPIView(generics.CreateAPIView, mixins.CreateModelMixin, generics.GenericAPIView):
     lookup_field = 'pk'
     serializer_class = TweetSerializer
-    permission_classes = [IsOwnerOrReadOnly]
 
     def get(self, request, author=None):
         if author != None:
@@ -39,8 +38,8 @@ class TweetAPIView(generics.CreateAPIView, mixins.CreateModelMixin, generics.Gen
         return self.create(request, *args, **kwargs)
 
 
-class Followers(APIView):
-    permission_classes = [IsOwnerOrReadOnly]
+class Followers(generics.CreateAPIView, mixins.CreateModelMixin, generics.GenericAPIView):
+    serializer_class = FollowerSerializer
 
     def get(self, request, follower_id=None):
         if follower_id != None:
@@ -56,6 +55,9 @@ class Followers(APIView):
         unfollow.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    def post(self, request):
+        return self.create(request)
+
 
 class AllData(APIView):
 
@@ -70,6 +72,31 @@ class AllData(APIView):
 
             sql = """SELECT authapi_user.id, authapi_user.first_name, authapi_user.last_name, authapi_tweet.tweet_text, authapi_tweet.created_on FROM authapi_tweet INNER JOIN authapi_user ON authapi_user.id = authapi_tweet.author_id WHERE authapi_tweet.author_id IN {} ORDER BY created_on DESC"""
             sql = sql.format(follower_ids)
+            cursor.execute(sql)
+            table = cursor.fetchall()
+            return Response(table)
+
+
+class UserProfiles(APIView):
+
+    def get(self, request, ids=None):
+        profiles = self.request.GET
+        profile_ids = []
+        if (len(profiles) == 1):
+            profile_ids = int(profiles['0'])
+        else:
+            for x in profiles:
+                profile_ids.append(int(profiles[x]))
+            profile_ids = tuple(profile_ids)
+
+        with connection.cursor() as cursor:
+            if(len(profiles) == 1):
+                sql = """SELECT authapi_user.id, authapi_user.first_name, authapi_user.last_name, authapi_user.about_me, authapi_user.username FROM authapi_user WHERE authapi_user.id = {} """
+            elif (len(profiles) > 1):
+                sql = """SELECT authapi_user.id, authapi_user.first_name, authapi_user.last_name, authapi_user.about_me, authapi_user.username FROM authapi_user WHERE authapi_user.id IN {}"""
+            else:
+                sql = """SELECT authapi_user.id, authapi_user.first_name, authapi_user.last_name, authapi_user.about_me, authapi_user.username FROM authapi_user"""
+            sql = sql.format(profile_ids)
             cursor.execute(sql)
             table = cursor.fetchall()
             return Response(table)

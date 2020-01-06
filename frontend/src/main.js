@@ -11,8 +11,10 @@ new Vue({
   router,
   store,
   beforeCreate() {
-    this.$store.dispatch("initializeToken");
-    return;
+    if (localStorage.auth_token) {
+      this.$store.dispatch("initializeToken");
+      return;
+    }
   },
   render: h => h(App)
 }).$mount("#app");

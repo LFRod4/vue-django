@@ -14,7 +14,9 @@ export default new Vuex.Store({
     error: {},
     userTweetList: [],
     followersTweetList: [],
-    activeTab: ""
+    activeTab: "",
+    signUp: false,
+    follower_ids: []
   },
   getters: {
     user: state => {
@@ -39,16 +41,20 @@ export default new Vuex.Store({
     },
     LOGOUT: state => {
       state.authToken = "";
+    },
+    LOGINSIGNUP: (state, bool) => {
+      state.signUp = bool;
+    },
+    SETFOLLOWERIDS: (state, follower_ids) => {
+      state.follower_ids = follower_ids;
     }
   },
   actions: {
     initializeToken: ({ dispatch }) => {
-      if (localStorage.auth_token) {
-        let data = {
-          auth_token: JSON.parse(localStorage.getItem("auth_token"))
-        };
-        dispatch("getUserInfo", data);
-      }
+      let data = {
+        auth_token: JSON.parse(localStorage.getItem("auth_token"))
+      };
+      dispatch("getUserInfo", data);
     },
     logIn: ({ dispatch }, data) => {
       axios.defaults.headers = {
@@ -69,6 +75,9 @@ export default new Vuex.Store({
         });
     },
     createNewUser: ({ dispatch }, payload) => {
+      axios.defaults.headers = {
+        "Content-Type": "application/json"
+      };
       axios
         .post("http://127.0.0.1:8000/auth/users/", {
           first_name: payload.firstName,
@@ -76,7 +85,8 @@ export default new Vuex.Store({
           username: payload.username,
           password: payload.password,
           re_password: payload.password,
-          email: payload.email
+          email: payload.email,
+          about_me: payload.aboutMe
         })
         .then(response => {
           dispatch("logIn", payload);
@@ -101,6 +111,7 @@ export default new Vuex.Store({
             JSON.stringify(data["auth_token"])
           );
           dispatch("getUserTweets");
+          dispatch("getFollowers");
         })
         .catch(error => {
           console.log(error);
@@ -116,19 +127,22 @@ export default new Vuex.Store({
           return error;
         });
     },
-    getFollowers: ({ state, dispatch }) => {
+    getFollowers: ({ state, commit, dispatch }) => {
       var follower_ids = [];
-      axios
-        .get(`http://127.0.0.1:8000/api/tweets/followers/${state.user.id}`)
-        .then(response => {
-          follower_ids = response.data.map(obj => {
-            return obj.followed_id;
+      if (follower_ids.length > 0) {
+        axios
+          .get(`http://127.0.0.1:8000/api/tweets/followers/${state.user.id}`)
+          .then(response => {
+            follower_ids = response.data.map(obj => {
+              return obj.followed_id;
+            });
+            commit("SETFOLLOWERIDS", follower_ids);
+            dispatch("getFollowerTweets", follower_ids);
+          })
+          .catch(error => {
+            return error;
           });
-          dispatch("getFollowerTweets", follower_ids);
-        })
-        .catch(error => {
-          return error;
-        });
+      }
     },
     getFollowerTweets: ({ commit }, follower_ids) => {
       axios
@@ -158,6 +172,7 @@ export default new Vuex.Store({
           Authorization: "Token " + context.authToken
         })
         .then(response => {
+          localStorage.clear();
           context.commit("LOGOUT");
           router.push({ path: "/" });
           return response;
@@ -168,6 +183,9 @@ export default new Vuex.Store({
     },
     changeActiveTab: ({ commit }, newActiveTab) => {
       commit("CHANGEACTIVETAB", newActiveTab);
+    },
+    loginSignUp: ({ commit }, bool) => {
+      commit("LOGINSIGNUP", bool);
     }
   },
   modules: {}

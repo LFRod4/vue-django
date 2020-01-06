@@ -9,6 +9,8 @@ class User(AbstractUser):
                               max_length=255, unique=True)
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
     USERNAME_FIELD = 'email'
+    about_me = models.CharField(
+        max_length=500, default='You have not set your About Me')
 
     def get_username(self):
         return self.username
@@ -25,6 +27,8 @@ class Tweet(models.Model):
 
 
 class Follower(models.Model):
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, null=True,  related_name="follower")
     follower_id = models.IntegerField()
     followed_id = models.IntegerField()
 

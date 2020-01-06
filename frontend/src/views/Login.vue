@@ -1,7 +1,7 @@
 <template>
   <div class="login box">
-    <LoginForm></LoginForm>
-    <SignUp v-if="loggedIn"></SignUp>
+    <LoginForm v-if="!this.$store.state.signUp"></LoginForm>
+    <SignUp v-if="this.$store.state.signUp"></SignUp>
   </div>
 </template>
 
@@ -10,7 +10,7 @@
 import LoginSignUpVue from "../layouts/LoginSignUp.vue";
 import LoginForm from "@/components/LoginForm.vue";
 import SignUp from "@/components/SignUp.vue";
-// import router from "../router/index.js";
+import router from "../router/index.js";
 
 export default {
   name: "home",
@@ -19,18 +19,18 @@ export default {
   },
   data() {
     return {
-      loggedIn: false
+      signUp: false
     };
   },
   components: {
     LoginForm,
     SignUp
+  },
+  mounted() {
+    if (this.$store.state.authToken) {
+      router.push({ path: "/myprofile" });
+    }
   }
-  // mounted() {
-  //   if (this.$store.state.authToken) {
-  //     router.push({ path: "/myprofile" });
-  //   }
-  // }
 };
 </script>
 

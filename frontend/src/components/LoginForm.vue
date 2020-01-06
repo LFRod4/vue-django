@@ -19,7 +19,7 @@
         </span>
       </p>
     </div>
-    <a class="field is-size-7" v-if="signUp" @click="signUp = true">Sign Up</a>
+    <div class="sign-up is-size-7 has-text-weight-semibold has-text-link" @click="signUp()">Sign Up</div>
 
     <div class="field is-grouped">
       <div class="control">
@@ -38,8 +38,7 @@ export default {
     return {
       username: "",
       password: "",
-      email: "",
-      signUp: false
+      email: ""
     };
   },
   methods: {
@@ -49,9 +48,16 @@ export default {
         password: this.password
       };
       this.$store.dispatch("logIn", loginInfo);
+    },
+    signUp() {
+      this.$store.dispatch("loginSignUp", true);
     }
   }
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.sign-up {
+  padding-bottom: 10px;
+}
+</style>

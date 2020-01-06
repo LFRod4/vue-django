@@ -5,10 +5,16 @@
     </div>
     <div class="columns hero-body">
       <div class="column is-one-fifth">
-        <HomeSideNav></HomeSideNav>
+        <UserCard></UserCard>
       </div>
-      <div class="column right-column">
+      <div class="column right-column" v-if="tweetList.length > 0">
         <Tweet class="tweet" v-for="tweets in tweetList" :key="tweets.id" :tweets="tweets"></Tweet>
+      </div>
+      <div v-else>
+        <div class="column righ-column">
+          You aren't following anyone. Check out the
+          <span>discover</span> tab to find cool people
+        </div>
       </div>
     </div>
   </div>
@@ -17,13 +23,13 @@
 <script>
 // @ is an alias to /src
 import LayoutDefault from "@/layouts/LayoutDefault.vue";
-import HomeSideNav from "@/components/HomeSideNav.vue";
+import UserCard from "@/components/UserCard.vue";
 import Tweet from "@/components/Tweet.vue";
 
 export default {
   name: "home",
   components: {
-    HomeSideNav,
+    UserCard,
     Tweet
   },
   created() {
