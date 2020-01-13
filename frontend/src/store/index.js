@@ -129,20 +129,18 @@ export default new Vuex.Store({
     },
     getFollowers: ({ state, commit, dispatch }) => {
       var follower_ids = [];
-      if (follower_ids.length > 0) {
-        axios
-          .get(`http://127.0.0.1:8000/api/tweets/followers/${state.user.id}`)
-          .then(response => {
-            follower_ids = response.data.map(obj => {
-              return obj.followed_id;
-            });
-            commit("SETFOLLOWERIDS", follower_ids);
-            dispatch("getFollowerTweets", follower_ids);
-          })
-          .catch(error => {
-            return error;
+      axios
+        .get(`http://127.0.0.1:8000/api/tweets/followers/${state.user.id}`)
+        .then(response => {
+          follower_ids = response.data.map(obj => {
+            return obj.followed_id;
           });
-      }
+          commit("SETFOLLOWERIDS", follower_ids);
+          dispatch("getFollowerTweets", follower_ids);
+        })
+        .catch(error => {
+          return error;
+        });
     },
     getFollowerTweets: ({ commit }, follower_ids) => {
       axios

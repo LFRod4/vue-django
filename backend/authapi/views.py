@@ -64,13 +64,22 @@ class AllData(APIView):
     def get(self, request, ids=None):
         followers = self.request.GET
         follower_ids = []
-        for x in followers:
-            follower_ids.append(int(followers[x]))
-        follower_ids = tuple(follower_ids)
+        if(len(followers) == 1):
+            follower_ids = int(followers['0'])
+        else:
+            for x in followers:
+                follower_ids.append(int(followers[x]))
+            follower_ids = tuple(follower_ids)
 
         with connection.cursor() as cursor:
 
-            sql = """SELECT authapi_user.id, authapi_user.first_name, authapi_user.last_name, authapi_tweet.tweet_text, authapi_tweet.created_on FROM authapi_tweet INNER JOIN authapi_user ON authapi_user.id = authapi_tweet.author_id WHERE authapi_tweet.author_id IN {} ORDER BY created_on DESC"""
+            if(len(followers) == 1):
+                sql = """SELECT authapi_user.id, authapi_user.first_name, authapi_user.last_name, authapi_tweet.tweet_text, authapi_tweet.created_on FROM authapi_tweet INNER JOIN authapi_user ON authapi_user.id = authapi_tweet.author_id WHERE authapi_tweet.author_id = {} ORDER BY created_on DESC"""
+            elif (len(followers) > 1):
+                sql = """SELECT authapi_user.id, authapi_user.first_name, authapi_user.last_name, authapi_tweet.tweet_text, authapi_tweet.created_on FROM authapi_tweet INNER JOIN authapi_user ON authapi_user.id = authapi_tweet.author_id WHERE authapi_tweet.author_id IN {} ORDER BY created_on DESC"""
+            else:
+                sql = """SELECT authapi_user.id, authapi_user.first_name, authapi_user.last_name, authapi_tweet.tweet_text, authapi_tweet.created_on FROM authapi_tweet INNER JOIN authapi_user ON authapi_user.id = authapi_tweet.author_id WHERE authapi_tweet.author_id IN {} ORDER BY created_on DESC"""
+
             sql = sql.format(follower_ids)
             cursor.execute(sql)
             table = cursor.fetchall()
@@ -94,8 +103,6 @@ class UserProfiles(APIView):
                 sql = """SELECT authapi_user.id, authapi_user.first_name, authapi_user.last_name, authapi_user.about_me, authapi_user.username FROM authapi_user WHERE authapi_user.id = {} """
             elif (len(profiles) > 1):
                 sql = """SELECT authapi_user.id, authapi_user.first_name, authapi_user.last_name, authapi_user.about_me, authapi_user.username FROM authapi_user WHERE authapi_user.id IN {}"""
-            else:
-                sql = """SELECT authapi_user.id, authapi_user.first_name, authapi_user.last_name, authapi_user.about_me, authapi_user.username FROM authapi_user"""
             sql = sql.format(profile_ids)
             cursor.execute(sql)
             table = cursor.fetchall()
