@@ -154,8 +154,9 @@ export default new Vuex.Store({
             obj["author"] = response.data[x][0];
             obj["first_name"] = response.data[x][1];
             obj["last_name"] = response.data[x][2];
-            obj["tweet_text"] = response.data[x][3];
-            obj["created_on"] = response.data[x][4];
+            obj["username"] = response.data[x][3];
+            obj["tweet_text"] = response.data[x][4];
+            obj["created_on"] = response.data[x][5];
             followerTweets.push(obj);
           }
           commit("SETFOLLOWERTWEETS", followerTweets);

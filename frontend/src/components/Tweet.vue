@@ -10,10 +10,10 @@
         <div class="content">
           <div>
             <div v-if="tweets.first_name">
-              <div>{{ tweets.first_name + " " + tweets.last_name }}</div>
+              <div>{{ tweets.first_name + " @" + tweets.username }}</div>
             </div>
             <div v-else>
-              <div>{{ user.first_name + " " + user.last_name }}</div>
+              <div>{{ user.first_name + " @" + user.username }}</div>
             </div>
             <div class="tweet-text">{{ tweets.tweet_text }}</div>
             <br />

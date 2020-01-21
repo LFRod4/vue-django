@@ -4,6 +4,7 @@
       <div
         class="card-footer-item has-background-info has-text-white"
         v-if="ifFollowing(userId)"
+        @click="unfollow(userId)"
       >Following</div>
       <div class="card-footer-item" v-else @click="followUser(userId)">Follow</div>
     </footer>
@@ -42,7 +43,8 @@ export default {
       } else {
         return false;
       }
-    }
+    },
+    unfoloow(id) {}
   },
   computed: {
     ...mapState(["follower_ids", "user"])

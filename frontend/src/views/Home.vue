@@ -5,10 +5,10 @@
     </div>
     <div class="columns hero-body">
       <div class="column is-one-fifth">
-        <UserCard></UserCard>
+        <UserCard :profile="user"></UserCard>
       </div>
-      <div class="column right-column" v-if="tweetList.length > 0">
-        <Tweet class="tweet" v-for="tweets in tweetList" :key="tweets.id" :tweets="tweets"></Tweet>
+      <div class="column right-column" v-if="followersTweetList.length > 0">
+        <Tweet class="tweet" v-for="tweets in followersTweetList" :key="tweets.id" :tweets="tweets"></Tweet>
       </div>
       <div v-else>
         <div class="column righ-column">
@@ -26,6 +26,8 @@ import LayoutDefault from "@/layouts/LayoutDefault.vue";
 import UserCard from "@/components/UserCard.vue";
 import Tweet from "@/components/Tweet.vue";
 
+import { mapState } from "vuex";
+
 export default {
   name: "home",
   components: {
@@ -37,9 +39,7 @@ export default {
     this.$store.dispatch("getFollowers");
   },
   computed: {
-    tweetList() {
-      return this.$store.state.followersTweetList;
-    }
+    ...mapState(["followersTweetList", "user"])
   }
 };
 </script>
