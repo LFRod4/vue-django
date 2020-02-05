@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db import connection
+from django.views.generic.edit import DeleteView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
@@ -38,7 +39,7 @@ class TweetAPIView(generics.CreateAPIView, mixins.CreateModelMixin, generics.Gen
         return self.create(request, *args, **kwargs)
 
 
-class Followers(generics.CreateAPIView, mixins.CreateModelMixin, generics.GenericAPIView):
+class Followers(generics.CreateAPIView, mixins.CreateModelMixin, generics.GenericAPIView, DeleteView):
     serializer_class = FollowerSerializer
 
     def get(self, request, follower_id=None):
@@ -49,10 +50,11 @@ class Followers(generics.CreateAPIView, mixins.CreateModelMixin, generics.Generi
         data = FollowerSerializer(followers, many=True).data
         return Response(data)
 
-    def delete(self, request, follower_id=None):
-
-        unfollow = Follower.objects.filter(followed_id=follower_id)
-        unfollow.delete()
+    def delete(self, request, *args, **kwargs):
+        print(self.get('followers'))
+        # unfollow = Follower.objects.filter(
+        #     follower_id=follower_id, followed_id=followed_id)
+        # unfollow.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def post(self, request):
@@ -74,10 +76,13 @@ class AllData(APIView):
         with connection.cursor() as cursor:
 
             if(len(followers) == 1):
+                print('1')
                 sql = """SELECT authapi_user.id, authapi_user.first_name, authapi_user.last_name, authapi_user.username, authapi_tweet.tweet_text, authapi_tweet.created_on FROM authapi_tweet INNER JOIN authapi_user ON authapi_user.id = authapi_tweet.author_id WHERE authapi_tweet.author_id = {} ORDER BY created_on DESC"""
             elif (len(followers) > 1):
+                print('greater')
                 sql = """SELECT authapi_user.id, authapi_user.first_name, authapi_user.last_name, authapi_user.username, authapi_tweet.tweet_text, authapi_tweet.created_on FROM authapi_tweet INNER JOIN authapi_user ON authapi_user.id = authapi_tweet.author_id WHERE authapi_tweet.author_id IN {} ORDER BY created_on DESC"""
             else:
+                print('else')
                 sql = """SELECT authapi_user.id, authapi_user.first_name, authapi_user.last_name, authapi_user.username, authapi_tweet.tweet_text, authapi_tweet.created_on FROM authapi_tweet INNER JOIN authapi_user ON authapi_user.id = authapi_tweet.author_id WHERE authapi_tweet.author_id IN {} ORDER BY created_on DESC"""
 
             sql = sql.format(follower_ids)
@@ -110,3 +115,14 @@ class UserProfiles(APIView):
             cursor.execute(sql)
             table = cursor.fetchall()
             return Response(table)
+
+
+class DeleteFollower(APIView):
+
+    def post(self, request):
+        followerr_id = request.data['follower_id']
+        followedd_id = request.data['followed_id']
+        removeFollow = Follower.objects.filter(
+            follower_id=followerr_id, followed_id=followedd_id)
+        removeFollow.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

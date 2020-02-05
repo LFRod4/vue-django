@@ -47,6 +47,14 @@ export default new Vuex.Store({
     },
     SETFOLLOWERIDS: (state, follower_ids) => {
       state.follower_ids = follower_ids;
+    },
+    UPDATEFOLLOWERID: (state, userId) => {
+      window.alert("test");
+      Vue.set(state.follower_ids, state.follower_ids.length, userId);
+    },
+    REMOVEFOLLOWERID: (state, unfollowId) => {
+      var index = state.follower_ids.indexOf(unfollowId);
+      Vue.delete(state.follower_ids, index);
     }
   },
   actions: {
@@ -185,6 +193,12 @@ export default new Vuex.Store({
     },
     loginSignUp: ({ commit }, bool) => {
       commit("LOGINSIGNUP", bool);
+    },
+    updateFollowerId: (commit, userId) => {
+      commit("UPDATEFOLLOWERID", userId);
+    },
+    removeFollowerId: (commit, unfollowId) => {
+      commit("REMOVEFOLLOWERID", unfollowId);
     }
   },
   modules: {}

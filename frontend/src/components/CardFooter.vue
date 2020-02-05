@@ -18,7 +18,12 @@ export default {
   name: "cardFooter",
   props: ["userId"],
   data() {
-    return {};
+    return {
+      follower_ids: []
+    };
+  },
+  created() {
+    this.follower_ids = this.$store.state.follower_ids;
   },
   methods: {
     followUser(userId) {
@@ -31,6 +36,8 @@ export default {
           followed_id: userId
         })
         .then(response => {
+          this.$store.dispatch("updateFollowerId", userId);
+          this.follower_ids.push(userId);
           return response;
         })
         .catch(error => {
@@ -44,10 +51,28 @@ export default {
         return false;
       }
     },
-    unfoloow(id) {}
+    unfollow(unfollowId) {
+      axios.defaults.headers = {
+        "Content-Type": "application/json"
+      };
+      axios
+        .post("http://127.0.0.1:8000/api/tweets/delete/", {
+          follower_id: this.user.id,
+          followed_id: unfollowId
+        })
+        .then(response => {
+          var index = this.follower_ids.indexOf(unfollowId);
+          this.follower_ids.splice(index, 1);
+          this.$store.dispatch("removeFollowerId", unfollowId);
+          return response;
+        })
+        .catch(error => {
+          return error;
+        });
+    }
   },
   computed: {
-    ...mapState(["follower_ids", "user"])
+    ...mapState(["user"])
   }
 };
 </script>
