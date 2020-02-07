@@ -1,0 +1,14 @@
+{
+    "fontenddev": {
+        "awscloudformation": {
+            "AuthRoleName": "twitter-frontend-fontenddev-20200207112433-authRole",
+            "UnauthRoleArn": "arn:aws:iam::543774592810:role/twitter-frontend-fontenddev-20200207112433-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::543774592810:role/twitter-frontend-fontenddev-20200207112433-authRole",
+            "Region": "us-west-2",
+            "DeploymentBucketName": "twitter-frontend-fontenddev-20200207112433-deployment",
+            "UnauthRoleName": "twitter-frontend-fontenddev-20200207112433-unauthRole",
+            "StackName": "twitter-frontend-fontenddev-20200207112433",
+            "StackId": "arn:aws:cloudformation:us-west-2:543774592810:stack/twitter-frontend-fontenddev-20200207112433/78dbd930-49df-11ea-8fbc-065424fac776"
+        }
+    }
+}
