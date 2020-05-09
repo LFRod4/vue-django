@@ -1,0 +1,32 @@
+{
+	"providers": {
+		"awscloudformation": {
+			"AuthRoleName": "twitter-frontend-fontenddev-20200207112433-authRole",
+			"UnauthRoleArn": "arn:aws:iam::543774592810:role/twitter-frontend-fontenddev-20200207112433-unauthRole",
+			"AuthRoleArn": "arn:aws:iam::543774592810:role/twitter-frontend-fontenddev-20200207112433-authRole",
+			"Region": "us-west-2",
+			"DeploymentBucketName": "twitter-frontend-fontenddev-20200207112433-deployment",
+			"UnauthRoleName": "twitter-frontend-fontenddev-20200207112433-unauthRole",
+			"StackName": "twitter-frontend-fontenddev-20200207112433",
+			"StackId": "arn:aws:cloudformation:us-west-2:543774592810:stack/twitter-frontend-fontenddev-20200207112433/78dbd930-49df-11ea-8fbc-065424fac776"
+		}
+	},
+	"hosting": {
+		"S3AndCloudFront": {
+			"service": "S3AndCloudFront",
+			"providerPlugin": "awscloudformation",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/twitter-frontend-fontenddev-20200207112433-deployment/amplify-cfn-templates/hosting/template.json",
+				"logicalId": "hostingS3AndCloudFront"
+			},
+			"lastPushTimeStamp": "2020-02-07T19:28:38.579Z",
+			"output": {
+				"S3BucketSecureURL": "https://witter-rontend-20200207112646-hostingbucket-fontenddev.s3.amazonaws.com",
+				"WebsiteURL": "http://witter-rontend-20200207112646-hostingbucket-fontenddev.s3-website-us-west-2.amazonaws.com",
+				"Region": "us-west-2",
+				"HostingBucketName": "witter-rontend-20200207112646-hostingbucket-fontenddev"
+			},
+			"lastPushDirHash": "a6y2D1eWZtlYv+OMvxnoRerze4E="
+		}
+	}
+}

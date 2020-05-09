@@ -16,7 +16,8 @@ export default new Vuex.Store({
     followersTweetList: [],
     activeTab: "",
     signUp: false,
-    follower_ids: []
+    follower_ids: [],
+    api: "api-env.equp3wajah.us-west-2.elasticbeanstalk.com"
   },
   getters: {
     user: state => {
@@ -49,7 +50,6 @@ export default new Vuex.Store({
       state.follower_ids = follower_ids;
     },
     UPDATEFOLLOWERID: (state, userId) => {
-      window.alert("test");
       Vue.set(state.follower_ids, state.follower_ids.length, userId);
     },
     REMOVEFOLLOWERID: (state, unfollowId) => {
@@ -69,10 +69,13 @@ export default new Vuex.Store({
         "Content-Type": "application/json"
       };
       axios
-        .post("http://127.0.0.1:8000/auth/token/login/", {
-          email: data.email,
-          password: data.password
-        })
+        .post(
+          "http://api-env.equp3wajah.us-west-2.elasticbeanstalk.com/auth/token/login/",
+          {
+            email: data.email,
+            password: data.password
+          }
+        )
         .then(response => {
           dispatch("getUserInfo", response.data);
           dispatch("changeActiveTab", "profile");
@@ -87,15 +90,18 @@ export default new Vuex.Store({
         "Content-Type": "application/json"
       };
       axios
-        .post("http://127.0.0.1:8000/auth/users/", {
-          first_name: payload.firstName,
-          last_name: payload.lastName,
-          username: payload.username,
-          password: payload.password,
-          re_password: payload.password,
-          email: payload.email,
-          about_me: payload.aboutMe
-        })
+        .post(
+          "http://api-env.equp3wajah.us-west-2.elasticbeanstalk.com/auth/users/",
+          {
+            first_name: payload.firstName,
+            last_name: payload.lastName,
+            username: payload.username,
+            password: payload.password,
+            re_password: payload.password,
+            email: payload.email,
+            about_me: payload.aboutMe
+          }
+        )
         .then(response => {
           dispatch("logIn", payload);
           return response.data;
@@ -105,11 +111,14 @@ export default new Vuex.Store({
         });
     },
     getUserInfo: ({ commit, dispatch }, data) => {
+      console.log(data);
       axios.defaults.headers = {
-        Authorization: "Token " + data["auth_token"]
+        Authorization: `Token ${data.auth_token}`
       };
       axios
-        .get("http://127.0.0.1:8000/auth/users/me/")
+        .get(
+          "http://api-env.equp3wajah.us-west-2.elasticbeanstalk.com/auth/users/me/"
+        )
         .then(response => {
           commit("SETUSERINFO", response.data);
           commit("SETAUTHTOKEN", data["auth_token"]);
@@ -127,7 +136,9 @@ export default new Vuex.Store({
     },
     getUserTweets: ({ state, commit }) => {
       axios
-        .get(`http://127.0.0.1:8000/api/tweets/list/${state.user.id}`)
+        .get(
+          `http://api-env.equp3wajah.us-west-2.elasticbeanstalk.com/api/tweets/list/${state.user.id}`
+        )
         .then(response => {
           commit("SETUSERTWEETS", response.data);
         })
@@ -138,7 +149,9 @@ export default new Vuex.Store({
     getFollowers: ({ state, commit, dispatch }) => {
       var follower_ids = [];
       axios
-        .get(`http://127.0.0.1:8000/api/tweets/followers/${state.user.id}`)
+        .get(
+          `http://api-env.equp3wajah.us-west-2.elasticbeanstalk.com/api/tweets/followers/${state.user.id}`
+        )
         .then(response => {
           follower_ids = response.data.map(obj => {
             return obj.followed_id;
@@ -152,9 +165,12 @@ export default new Vuex.Store({
     },
     getFollowerTweets: ({ commit }, follower_ids) => {
       axios
-        .get("http://127.0.0.1:8000/api/tweets/alldata/", {
-          params: follower_ids
-        })
+        .get(
+          "http://api-env.equp3wajah.us-west-2.elasticbeanstalk.com/api/tweets/alldata/",
+          {
+            params: follower_ids
+          }
+        )
         .then(response => {
           var followerTweets = [];
           for (var x = 0; x < response.data.length; x++) {
@@ -175,9 +191,12 @@ export default new Vuex.Store({
     },
     logout: context => {
       axios
-        .post("http://127.0.0.1:8000/auth/token/logout/", {
-          Authorization: "Token " + context.authToken
-        })
+        .post(
+          "http://api-env.equp3wajah.us-west-2.elasticbeanstalk.com/auth/token/logout/",
+          {
+            Authorization: "Token " + context.authToken
+          }
+        )
         .then(response => {
           localStorage.clear();
           context.commit("LOGOUT");

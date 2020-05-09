@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '=!+b)b%!iywos_ezbkd4*sy5akb+6+2)qe&b++#(-65%s4avbb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['api-dev2.us-west-2.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['api-dev2.us-west-2.elasticbeanstalk.com', '127.0.0.1']
 
 
 # Application definition
@@ -65,7 +65,7 @@ CORS_ORIGIN_WHITELIST = [
 ]
 CORS_ORIGIN_REGEX_WHITELIST = [
     'http://localhost:8080',
-    'http://localhost:8080'
+    'http://localhost:8080',
 ]
 
 ROOT_URLCONF = 'twitter.urls'
